@@ -10,7 +10,7 @@
 <dd></dd>
 <dt><a href="#MessageEnvelope">MessageEnvelope</a></dt>
 <dd></dd>
-<dt><a href="#MLCat">MLCat</a></dt>
+<dt><a href="#SlimView">SlimView</a></dt>
 <dd></dd>
 </dl>
 <a name="EntryController"></a>
@@ -32,7 +32,7 @@ Class that keeps track of all the entries for an export document
 
 | Param | Type | Description |
 | --- | --- | --- |
-| slimView | <code>[MLCat](#MLCat)</code> | SlimView instance to use the EntryController with |
+| slimView | <code>[SlimView](#SlimView)</code> | SlimView instance to use the EntryController with |
 
 <a name="EntryController+entrySelected"></a>
 ### entryController.entrySelected(entry, doNotLoad)
@@ -154,115 +154,115 @@ Retrieve the data for this envelope depending on the envelope's type
 Every MessagEnvelope will be serialized into JSON
 
 **Kind**: instance method of <code>[MessageEnvelope](#MessageEnvelope)</code>  
-<a name="MLCat"></a>
-## MLCat
+<a name="SlimView"></a>
+## SlimView
 **Kind**: global class  
 
-* [MLCat](#MLCat)
-  * [new MLCat()](#new_MLCat_new)
-  * [.messageQueue](#MLCat+messageQueue) : <code>Array</code>
-  * [.load(forEntry)](#MLCat+load)
-  * [.getSlimViewUrl(entry)](#MLCat+getSlimViewUrl) ⇒ <code>string</code>
-  * [.submitTargets(entry)](#MLCat+submitTargets)
-  * [.setFreeclick()](#MLCat+setFreeclick)
-  * [.sendQueuedMessages()](#MLCat+sendQueuedMessages)
-  * [.receiveMessage(event)](#MLCat+receiveMessage)
-  * [.buildTranslationKeys(entryKeysObj)](#MLCat+buildTranslationKeys)
-  * [.handleViewChange(messageParams)](#MLCat+handleViewChange)
-  * [.sendMessage(type, command, messageData, [forced])](#MLCat+sendMessage)
-  * [.createEnvelope(type, command, messageData)](#MLCat+createEnvelope) ⇒ <code>[MessageEnvelope](#MessageEnvelope)</code>
+* [SlimView](#SlimView)
+  * [new SlimView()](#new_SlimView_new)
+  * [.messageQueue](#SlimView+messageQueue) : <code>Array</code>
+  * [.load(forEntry)](#SlimView+load)
+  * [.getSlimViewUrl(entry)](#SlimView+getSlimViewUrl) ⇒ <code>string</code>
+  * [.submitTargets(entry)](#SlimView+submitTargets)
+  * [.setFreeclick()](#SlimView+setFreeclick)
+  * [.sendQueuedMessages()](#SlimView+sendQueuedMessages)
+  * [.receiveMessage(event)](#SlimView+receiveMessage)
+  * [.buildTranslationKeys(entryKeysObj)](#SlimView+buildTranslationKeys)
+  * [.handleViewChange(messageParams)](#SlimView+handleViewChange)
+  * [.sendMessage(type, command, messageData, [forced])](#SlimView+sendMessage)
+  * [.createEnvelope(type, command, messageData)](#SlimView+createEnvelope) ⇒ <code>[MessageEnvelope](#MessageEnvelope)</code>
 
-<a name="new_MLCat_new"></a>
-### new MLCat()
+<a name="new_SlimView_new"></a>
+### new SlimView()
 Main class to handle the postMessage communication, serialization, handshake etc.
 
-<a name="MLCat+messageQueue"></a>
-### mlCat.messageQueue : <code>Array</code>
+<a name="SlimView+messageQueue"></a>
+### slimView.messageQueue : <code>Array</code>
 Queue for messages to be sent in case the SlimView is not yet ready to accept
 messages. Once connection is established between Vendor and the SlimView
 the queued messages will be submitted.
 
-**Kind**: instance property of <code>[MLCat](#MLCat)</code>  
-<a name="MLCat+load"></a>
-### mlCat.load(forEntry)
+**Kind**: instance property of <code>[SlimView](#SlimView)</code>  
+<a name="SlimView+load"></a>
+### slimView.load(forEntry)
 Load SlimView for an entry. Once Vendor-SlimView communication is established,
 let SlimView know that an entry needs to be highlighted.
 
-**Kind**: instance method of <code>[MLCat](#MLCat)</code>  
+**Kind**: instance method of <code>[SlimView](#SlimView)</code>  
 
 | Param | Type |
 | --- | --- |
 | forEntry | <code>[Entry](#Entry)</code> | 
 
-<a name="MLCat+getSlimViewUrl"></a>
-### mlCat.getSlimViewUrl(entry) ⇒ <code>string</code>
+<a name="SlimView+getSlimViewUrl"></a>
+### slimView.getSlimViewUrl(entry) ⇒ <code>string</code>
 Get the SlimView URL that needs to be loaded by Vendor
 
-**Kind**: instance method of <code>[MLCat](#MLCat)</code>  
+**Kind**: instance method of <code>[SlimView](#SlimView)</code>  
 
 | Param | Type |
 | --- | --- |
 | entry | <code>[Entry](#Entry)</code> | 
 
-<a name="MLCat+submitTargets"></a>
-### mlCat.submitTargets(entry)
+<a name="SlimView+submitTargets"></a>
+### slimView.submitTargets(entry)
 Update the SlimView with new translation
 
-**Kind**: instance method of <code>[MLCat](#MLCat)</code>  
+**Kind**: instance method of <code>[SlimView](#SlimView)</code>  
 
 | Param |
 | --- |
 | entry | 
 
-<a name="MLCat+setFreeclick"></a>
-### mlCat.setFreeclick()
+<a name="SlimView+setFreeclick"></a>
+### slimView.setFreeclick()
 Set the view-mode of SlimView to free-click
 
-**Kind**: instance method of <code>[MLCat](#MLCat)</code>  
-<a name="MLCat+sendQueuedMessages"></a>
-### mlCat.sendQueuedMessages()
+**Kind**: instance method of <code>[SlimView](#SlimView)</code>  
+<a name="SlimView+sendQueuedMessages"></a>
+### slimView.sendQueuedMessages()
 Until the postMessage communication channel is not built up,
 every outgoing message is queued. These will be flushed upon successful
 handshake.
 
-**Kind**: instance method of <code>[MLCat](#MLCat)</code>  
-<a name="MLCat+receiveMessage"></a>
-### mlCat.receiveMessage(event)
+**Kind**: instance method of <code>[SlimView](#SlimView)</code>  
+<a name="SlimView+receiveMessage"></a>
+### slimView.receiveMessage(event)
 Handle incoming postMessage events
 
-**Kind**: instance method of <code>[MLCat](#MLCat)</code>  
+**Kind**: instance method of <code>[SlimView](#SlimView)</code>  
 
 | Param |
 | --- |
 | event | 
 
-<a name="MLCat+buildTranslationKeys"></a>
-### mlCat.buildTranslationKeys(entryKeysObj)
+<a name="SlimView+buildTranslationKeys"></a>
+### slimView.buildTranslationKeys(entryKeysObj)
 This would be the place to verify what entries does SlimView know about
 and what entries I have loaded from the XLIFF
 
-**Kind**: instance method of <code>[MLCat](#MLCat)</code>  
+**Kind**: instance method of <code>[SlimView](#SlimView)</code>  
 
 | Param |
 | --- |
 | entryKeysObj | 
 
-<a name="MLCat+handleViewChange"></a>
-### mlCat.handleViewChange(messageParams)
+<a name="SlimView+handleViewChange"></a>
+### slimView.handleViewChange(messageParams)
 Handle entry selection on the SlimView. Keys might be of multiple format that SlimView
 sends over. This method attempts to handle all.
 
-**Kind**: instance method of <code>[MLCat](#MLCat)</code>  
+**Kind**: instance method of <code>[SlimView](#SlimView)</code>  
 
 | Param |
 | --- |
 | messageParams | 
 
-<a name="MLCat+sendMessage"></a>
-### mlCat.sendMessage(type, command, messageData, [forced])
+<a name="SlimView+sendMessage"></a>
+### slimView.sendMessage(type, command, messageData, [forced])
 Send a message to the SlimView window
 
-**Kind**: instance method of <code>[MLCat](#MLCat)</code>  
+**Kind**: instance method of <code>[SlimView](#SlimView)</code>  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -271,11 +271,11 @@ Send a message to the SlimView window
 | messageData |  |  |
 | [forced] | <code>bool</code> | Do not check connection state before sending message - used to handshake. Defaults to false |
 
-<a name="MLCat+createEnvelope"></a>
-### mlCat.createEnvelope(type, command, messageData) ⇒ <code>[MessageEnvelope](#MessageEnvelope)</code>
+<a name="SlimView+createEnvelope"></a>
+### slimView.createEnvelope(type, command, messageData) ⇒ <code>[MessageEnvelope](#MessageEnvelope)</code>
 Box the raw JSON message  into a MessageEnvelope object
 
-**Kind**: instance method of <code>[MLCat](#MLCat)</code>  
+**Kind**: instance method of <code>[SlimView](#SlimView)</code>  
 
 | Param |
 | --- |
