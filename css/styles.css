@@ -1,0 +1,44 @@
+div#container {
+	width: 1200px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+div#container h1 {
+  font-size: 12px;
+  margin: 5px 0px;
+}
+  
+div#leftColumn {
+  width: 400px;
+  float: left;
+}
+
+div#rightColumn {
+  margin-left: 10px;
+}
+
+div#connectionConfig {
+  clear: both;  
+}
+
+
+fieldset {
+  border: 1px solid black;
+}
+
+fieldset p {
+	margin: 5px 0px;
+}
+
+div#connectionConfig fieldset {
+  background: #eeffee;
+}
+
+div#translations fieldset {
+  background: #ffffee;
+}
+
+div.teTemplate {
+	display: none;
+}
