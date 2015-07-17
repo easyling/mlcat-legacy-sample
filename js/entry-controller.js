@@ -14,7 +14,7 @@ function EntryController(slimView) {
     this.selectedEntry = null;
     this.slimView = slimView;
 
-    /* global Entry:true */
+    /* global Entry, MLCat */
     Entry.static.entryController = this;
     MLCat.static.entryController = this;
 }
@@ -70,10 +70,10 @@ EntryController.prototype = {
     },
     /**
      * Add entry to the lookup
-     * @param entry
+     * @param {Entry} entry
      */
     addEntryToLookup: function(entry) {
-        this.entryByKey[this.key] = entry;
+        this.entryByKey[entry.key] = entry;
     },
     _toggleLabels: function(activeLabel) {
         $('label.active').toggleClass('active', false);

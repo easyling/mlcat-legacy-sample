@@ -167,7 +167,7 @@ MLCat.prototype = {
             if(MLCat.static.entryController.entryByKey.hasOwnProperty(nonUniqueKey)) {
                 // we have an entry by a unique key
                 selectedEntry = MLCat.static.entryController.entryByKey[nonUniqueKey];
-            } if(MLCat.static.entryController.entryByKey.hasOwnProperty(nonUniqueKey + '#0')) {
+            } else if(MLCat.static.entryController.entryByKey.hasOwnProperty(nonUniqueKey + '#0')) {
                 selectedEntry = MLCat.static.entryController.entryByKey[nonUniqueKey + '#0'];
             } else if(MLCat.static.entryController.entryByKey.hasOwnProperty(uniqueKey)) {
                 selectedEntry = MLCat.static.entryController.entryByKey[uniqueKey];
