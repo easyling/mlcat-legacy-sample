@@ -341,6 +341,11 @@ echo <<<EOT
         };
     </script>
     <script src="js/utils.js"></script>
+    <script src="js/entry-controller.js"></script>
+    <script src="js/entry.js"></script>
+    <script src="js/exceptions.js"></script>
+    <script src="js/message-envelope.js"></script>
+    <script src="js/slim-view.js"></script>
     <script src="slim-example.js"></script>
 </head>
 <body>
