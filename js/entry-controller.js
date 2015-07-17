@@ -2,7 +2,7 @@
 
 /**
  * Class that keeps track of all the entries for an export document
- * @param {MLCat} slimView SlimView instance to use the EntryController with
+ * @param {SlimView} slimView SlimView instance to use the EntryController with
  * @constructor
  */
 function EntryController(slimView) {
@@ -14,9 +14,9 @@ function EntryController(slimView) {
     this.selectedEntry = null;
     this.slimView = slimView;
 
-    /* global Entry, MLCat */
+    /* global Entry, SlimView */
     Entry.static.entryController = this;
-    MLCat.static.entryController = this;
+    SlimView.static.entryController = this;
 }
 
 EntryController.prototype = {

@@ -1,12 +1,12 @@
 'use strict';
 
-/* global MLCat, EntryController, Entry */
+/* global SlimView, EntryController, Entry */
 
 $(function(){
     // set internal states to "start"
-    MLCat.internalStates = Object.freeze({notReady: {}, initialized: {}, slimViewLoaded: {}, slimViewReady:{} });
+    SlimView.internalStates = Object.freeze({notReady: {}, initialized: {}, slimViewLoaded: {}, slimViewReady:{} });
 
-    var mlcat = new MLCat();
+    var mlcat = new SlimView();
     // create some support classes
     var entryController = new EntryController(mlcat);
     // start slimView

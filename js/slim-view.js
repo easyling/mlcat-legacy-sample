@@ -3,14 +3,14 @@
  * Main class to handle the postMessage communication, serialization, handshake etc.
  * @constructor
  */
-function MLCat() {
+function SlimView() {
     this.viewId = this.getToken();
     this.slimViewFrame = $('#embedSlimView');
     this.slimViewWindow = this.slimViewFrame[0].contentWindow;
     this.lastLoadedUrl = null;
     this.loadTimeout = null;
-    this.internalState = MLCat.internalStates.notReady;
-    this.messageReadyStates = [MLCat.internalStates.slimViewLoaded, MLCat.internalStates.slimViewReady];
+    this.internalState = SlimView.internalStates.notReady;
+    this.messageReadyStates = [SlimView.internalStates.slimViewLoaded, SlimView.internalStates.slimViewReady];
 
     /**
      * Queue for messages to be sent in case the SlimView is not yet ready to accept
@@ -21,7 +21,7 @@ function MLCat() {
     this.messageQueue = [];
 //        var that = this;
 }
-MLCat.prototype = {
+SlimView.prototype = {
     isExportSegmented: function() {
         return window['XLIFF']['segmented'];
     },
@@ -42,7 +42,7 @@ MLCat.prototype = {
             var that = this;
             this.loadTimeout = setTimeout(function() {
                 // reset internal state
-                that.internalState = MLCat.internalStates.notReady;
+                that.internalState = SlimView.internalStates.notReady;
                 that.slimViewFrame.prop('src', urlToLoad);
                 that.lastLoadedUrl = urlToLoad;
                 that.sendMessage('request', 'view', {'highlightedEntry': forEntry.key});
@@ -128,12 +128,12 @@ MLCat.prototype = {
         if (verifyEnvelope(envelope)) {
             switch(envelope.command) {
             case 'slimViewLoaded':
-                that.internalState = MLCat.internalStates.slimViewLoaded;
+                that.internalState = SlimView.internalStates.slimViewLoaded;
                 that.sendMessage('response', 'vendorReady', { }, true);
                 break;
             case 'slimViewReady':
                 that.buildTranslationKeys(envelope.parameters);
-                that.internalState = MLCat.internalStates.slimViewReady;
+                that.internalState = SlimView.internalStates.slimViewReady;
                 that.sendQueuedMessages();
                 break;
             case 'viewChanged':
@@ -164,15 +164,15 @@ MLCat.prototype = {
 
             var selectedEntry = null;
 
-            if(MLCat.static.entryController.entryByKey.hasOwnProperty(nonUniqueKey)) {
+            if(SlimView.static.entryController.entryByKey.hasOwnProperty(nonUniqueKey)) {
                 // we have an entry by a unique key
-                selectedEntry = MLCat.static.entryController.entryByKey[nonUniqueKey];
-            } else if(MLCat.static.entryController.entryByKey.hasOwnProperty(nonUniqueKey + '#0')) {
-                selectedEntry = MLCat.static.entryController.entryByKey[nonUniqueKey + '#0'];
-            } else if(MLCat.static.entryController.entryByKey.hasOwnProperty(uniqueKey)) {
-                selectedEntry = MLCat.static.entryController.entryByKey[uniqueKey];
+                selectedEntry = SlimView.static.entryController.entryByKey[nonUniqueKey];
+            } else if(SlimView.static.entryController.entryByKey.hasOwnProperty(nonUniqueKey + '#0')) {
+                selectedEntry = SlimView.static.entryController.entryByKey[nonUniqueKey + '#0'];
+            } else if(SlimView.static.entryController.entryByKey.hasOwnProperty(uniqueKey)) {
+                selectedEntry = SlimView.static.entryController.entryByKey[uniqueKey];
             } else {
-                selectedEntry = MLCat.static.entryController.entryByKey[uniqueKey + '#0'];
+                selectedEntry = SlimView.static.entryController.entryByKey[uniqueKey + '#0'];
             }
 
             // if entry was not found, dump an error message into console
@@ -181,11 +181,11 @@ MLCat.prototype = {
             }
 
             // we have found what we are looking for, highlight that entry
-            MLCat.static.entryController.entrySelected(selectedEntry, true);
+            SlimView.static.entryController.entrySelected(selectedEntry, true);
 //                setHighlightedDiv(messageParams.highlightedEntry);
         } else if (messageParams.url) {
 //                clearTranslationKeysList();
-            this.internalState = MLCat.internalStates.slimViewLoaded;
+            this.internalState = SlimView.internalStates.slimViewLoaded;
         }
     },
     getOrigin: function () {
@@ -254,6 +254,6 @@ MLCat.prototype = {
     }
 };
 
-MLCat.static = {
+SlimView.static = {
     'entryController': null
 };
