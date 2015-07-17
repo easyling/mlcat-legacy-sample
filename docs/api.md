@@ -1,8 +1,8 @@
 ## Classes
 <dl>
-<dt><a href="#Entry">Entry</a></dt>
-<dd></dd>
 <dt><a href="#EntryController">EntryController</a></dt>
+<dd></dd>
+<dt><a href="#Entry">Entry</a></dt>
 <dd></dd>
 <dt><a href="#InvalidEnvelopeTypeException">InvalidEnvelopeTypeException</a></dt>
 <dd></dd>
@@ -13,40 +13,29 @@
 <dt><a href="#MLCat">MLCat</a></dt>
 <dd></dd>
 </dl>
-<a name="Entry"></a>
-## Entry
-**Kind**: global class  
-<a name="new_Entry_new"></a>
-### new Entry(key, target, href, groupTarget, internalTarget, $label)
-TranslationEntry implementation - trans-unit in the xliffNote: entry and segment are used interchangeably
-
-
-| Param | Description |
-| --- | --- |
-| key | Key of segment - this is based on what the entries can be identified |
-| target | Target XML fragment for the entry |
-| href | On what site was the entry found on |
-| groupTarget | What trans-group does this entry belog to? |
-| internalTarget |  |
-| $label | DOMElement this entry "blongs to" |
-
 <a name="EntryController"></a>
 ## EntryController
 **Kind**: global class  
 
 * [EntryController](#EntryController)
-  * [new EntryController()](#new_EntryController_new)
-  * [.entrySelected(entry)](#EntryController+entrySelected)
+  * [new EntryController(slimView)](#new_EntryController_new)
+  * [.entrySelected(entry, doNotLoad)](#EntryController+entrySelected)
   * [.entryUpdated(entry)](#EntryController+entryUpdated)
-  * [.updateSelectedDivs()](#EntryController+updateSelectedDivs)
+  * [.updateSelectedDivs(entry)](#EntryController+updateSelectedDivs)
   * [.runPartialUpdate()](#EntryController+runPartialUpdate)
+  * [.addEntryToLookup(entry)](#EntryController+addEntryToLookup)
 
 <a name="new_EntryController_new"></a>
-### new EntryController()
+### new EntryController(slimView)
 Class that keeps track of all the entries for an export document
 
+
+| Param | Type | Description |
+| --- | --- | --- |
+| slimView | <code>[MLCat](#MLCat)</code> | SlimView instance to use the EntryController with |
+
 <a name="EntryController+entrySelected"></a>
-### entryController.entrySelected(entry)
+### entryController.entrySelected(entry, doNotLoad)
 Select/highlight an entry
 
 **Kind**: instance method of <code>[EntryController](#EntryController)</code>  
@@ -54,6 +43,7 @@ Select/highlight an entry
 | Param | Type |
 | --- | --- |
 | entry | <code>[Entry](#Entry)</code> | 
+| doNotLoad |  | 
 
 <a name="EntryController+entryUpdated"></a>
 ### entryController.entryUpdated(entry)
@@ -66,20 +56,50 @@ Update the entry's target
 | entry | <code>[Entry](#Entry)</code> | 
 
 <a name="EntryController+updateSelectedDivs"></a>
-### entryController.updateSelectedDivs()
+### entryController.updateSelectedDivs(entry)
 Update the DOMElements for en {Entry}
 
 **Kind**: instance method of <code>[EntryController](#EntryController)</code>  
 
-| Type |
-| --- |
-| <code>[Entry](#Entry)</code> | 
+| Param | Type |
+| --- | --- |
+| entry | <code>[Entry](#Entry)</code> | 
 
 <a name="EntryController+runPartialUpdate"></a>
 ### entryController.runPartialUpdate()
-Partial update is just another word to update a segment but with different targetserialization. Instead of sending a valid XML fragment, we send an XLIFF bit(with bpt, ept etc. tags)
+Partial update is just another word to update a segment but with different target
+serialization. Instead of sending a valid XML fragment, we send an XLIFF bit
+(with bpt, ept etc. tags)
 
 **Kind**: instance method of <code>[EntryController](#EntryController)</code>  
+<a name="EntryController+addEntryToLookup"></a>
+### entryController.addEntryToLookup(entry)
+Add entry to the lookup
+
+**Kind**: instance method of <code>[EntryController](#EntryController)</code>  
+
+| Param | Type |
+| --- | --- |
+| entry | <code>[Entry](#Entry)</code> | 
+
+<a name="Entry"></a>
+## Entry
+**Kind**: global class  
+<a name="new_Entry_new"></a>
+### new Entry(key, target, href, groupTarget, internalTarget, $label)
+TranslationEntry implementation - trans-unit in the xliff
+Note: entry and segment are used interchangeably
+
+
+| Param | Description |
+| --- | --- |
+| key | Key of segment - this is based on what the entries can be identified |
+| target | Target XML fragment for the entry |
+| href | On what site was the entry found on |
+| groupTarget | What trans-group does this entry belog to? |
+| internalTarget |  |
+| $label | DOMElement this entry "blongs to" |
+
 <a name="InvalidEnvelopeTypeException"></a>
 ## InvalidEnvelopeTypeException
 **Kind**: global class  
@@ -158,12 +178,15 @@ Main class to handle the postMessage communication, serialization, handshake etc
 
 <a name="MLCat+messageQueue"></a>
 ### mlCat.messageQueue : <code>Array</code>
-Queue for messages to be sent in case the SlimView is not yet ready to acceptmessages. Once connection is established between Vendor and the SlimViewthe queued messages will be submitted.
+Queue for messages to be sent in case the SlimView is not yet ready to accept
+messages. Once connection is established between Vendor and the SlimView
+the queued messages will be submitted.
 
 **Kind**: instance property of <code>[MLCat](#MLCat)</code>  
 <a name="MLCat+load"></a>
 ### mlCat.load(forEntry)
-Load SlimView for an entry. Once Vendor-SlimView communication is established,let SlimView know that an entry needs to be highlighted.
+Load SlimView for an entry. Once Vendor-SlimView communication is established,
+let SlimView know that an entry needs to be highlighted.
 
 **Kind**: instance method of <code>[MLCat](#MLCat)</code>  
 
@@ -198,7 +221,9 @@ Set the view-mode of SlimView to free-click
 **Kind**: instance method of <code>[MLCat](#MLCat)</code>  
 <a name="MLCat+sendQueuedMessages"></a>
 ### mlCat.sendQueuedMessages()
-Until the postMessage communication channel is not built up,every outgoing message is queued. These will be flushed upon successfulhandshake.
+Until the postMessage communication channel is not built up,
+every outgoing message is queued. These will be flushed upon successful
+handshake.
 
 **Kind**: instance method of <code>[MLCat](#MLCat)</code>  
 <a name="MLCat+receiveMessage"></a>
@@ -213,7 +238,8 @@ Handle incoming postMessage events
 
 <a name="MLCat+buildTranslationKeys"></a>
 ### mlCat.buildTranslationKeys(entryKeysObj)
-This would be the place to verify what entries does SlimView know aboutand what entries I have loaded from the XLIFF
+This would be the place to verify what entries does SlimView know about
+and what entries I have loaded from the XLIFF
 
 **Kind**: instance method of <code>[MLCat](#MLCat)</code>  
 
@@ -223,7 +249,8 @@ This would be the place to verify what entries does SlimView know aboutand what
 
 <a name="MLCat+handleViewChange"></a>
 ### mlCat.handleViewChange(messageParams)
-Handle entry selection on the SlimView. Keys might be of multiple format that SlimViewsends over. This method attempts to handle all.
+Handle entry selection on the SlimView. Keys might be of multiple format that SlimView
+sends over. This method attempts to handle all.
 
 **Kind**: instance method of <code>[MLCat](#MLCat)</code>  
 
