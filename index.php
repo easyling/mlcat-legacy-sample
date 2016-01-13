@@ -9,7 +9,7 @@
  */
 
 // Set your XLIFF file path here
-$xlf = file_get_contents("xliffs/xliff.xlf");
+$xlf = file_get_contents("xliffs/YOURFILE.xlf");
 
 class TranslationUnit {
 
@@ -352,7 +352,8 @@ echo <<<EOT
 <header>
     ProjectCode: {$doc->getProjectCode()}<br />
     SourceLang: {$doc->getSourceLanguage()}<br />
-    targetLang: {$doc->getTargetLanguage()}<br />
+    TargetLang: {$doc->getTargetLanguage()}<br />
+    OAuth2 token: <input type="text" name="oauth2_token" id="oauth2_token" value="{$_REQUEST['token']}" disabled="disabled"/>
 </header>
 <button id="freeclick">Freeclick</button>
 <div style="float: left;">

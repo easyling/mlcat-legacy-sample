@@ -11,6 +11,8 @@ function SlimView() {
     this.loadTimeout = null;
     this.internalState = SlimView.internalStates.notReady;
     this.messageReadyStates = [SlimView.internalStates.slimViewLoaded, SlimView.internalStates.slimViewReady];
+    this.emulateDesktop = false;
+    this.oauth2Used = false;
 
     /**
      * Queue for messages to be sent in case the SlimView is not yet ready to accept
@@ -24,6 +26,15 @@ function SlimView() {
 SlimView.prototype = {
     isExportSegmented: function() {
         return window['XLIFF']['segmented'];
+    },
+    /**
+     * The SlimView will function as though the embedding application was a Desktop App.
+     */
+    emulateDesktopAccessToken: function(accessToken) {
+        this.emulateDesktop = true;
+    },
+    useOAuth2: function() {
+        this.oauth2Used = true;
     },
     getToken: function() {
         /* global md5 */
@@ -57,14 +68,21 @@ SlimView.prototype = {
     },
     /**
      * Get the SlimView URL that needs to be loaded by Vendor
+     * If emulateDesktop is enabled, it will append the extra &o=1 get param to the URL
      * @param {Entry} entry
      * @returns {string}
      */
     getSlimViewUrl: function(entry) {
         var exportInfo =  window['exportInfo'];
-        return 'http://slim.app.easyling.com/'
-            + exportInfo['projectCode'] + '?targetLanguage=' + exportInfo['targetLanguage']
+        var slimParams = exportInfo['projectCode'] + '?targetLanguage=' + exportInfo['targetLanguage']
             + '&url=' + encodeURIComponent(entry.href) + '&viewId=' + this.viewId;
+        if(this.emulateDesktop) {
+            slimParams += "&o=1"; // o=1 means Desktop integration
+        } else if(this.oauth2Used) {
+            slimParams += "&o=2"; // o=2 means Web+OAuth2 auth
+        }
+        return 'http://slim-dot-memoq-dot-dev-easyling.appspot.com/'
+            + slimParams;
     },
     /**
      * Update the SlimView with new translation
@@ -129,7 +147,11 @@ SlimView.prototype = {
             switch(envelope.command) {
             case 'slimViewLoaded':
                 that.internalState = SlimView.internalStates.slimViewLoaded;
-                that.sendMessage('response', 'vendorReady', { }, true);
+                var responseParams = {};
+                if(that.oauth2Used) {
+                    responseParams['accessToken'] = 'ACCESS_TOKEN';
+                }
+                that.sendMessage('response', 'vendorReady', responseParams, true);
                 break;
             case 'slimViewReady':
                 that.buildTranslationKeys(envelope.parameters);
@@ -189,7 +211,7 @@ SlimView.prototype = {
         }
     },
     getOrigin: function () {
-        return 'http://slim.app.easyling.com';
+        return 'http://slim-dot-memoq-dot-dev-easyling.appspot.com';
     },
     /**
      * Send a message to the SlimView window

@@ -1,3 +1,15 @@
+function parseAndGetQueryParams() {
+	var queryParams = {};
+	window.location.search
+		.substring(1)
+		.split('&')
+		.forEach(function (val) {
+			var splittedParam = val.split('=');
+			queryParams[splittedParam[0]] = splittedParam[1] || undefined;
+		});
+	return queryParams;
+}
+
 function md5cycle(x, k) {
 	var a = x[0], b = x[1], c = x[2], d = x[3];
 
