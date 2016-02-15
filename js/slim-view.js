@@ -1,4 +1,13 @@
 'use strict';
+
+/**
+ * Origin of SlimView endpoint
+ *
+ * @constant
+ * @type {string}
+ */
+var SLIM_ENDPOINT = 'http://slim-dot-memoq-dot-dev-easyling.appspot.com/';
+
 /**
  * Main class to handle the postMessage communication, serialization, handshake etc.
  * @constructor
@@ -30,9 +39,12 @@ SlimView.prototype = {
     /**
      * The SlimView will function as though the embedding application was a Desktop App.
      */
-    emulateDesktopAccessToken: function(accessToken) {
+    emulateDesktopAccessToken: function() {
         this.emulateDesktop = true;
     },
+    /**
+     * Instruct SlimView to use OAuth2 as the authorization method
+     */
     useOAuth2: function() {
         this.oauth2Used = true;
     },
@@ -81,8 +93,7 @@ SlimView.prototype = {
         } else if(this.oauth2Used) {
             slimParams += "&o=2"; // o=2 means Web+OAuth2 auth
         }
-        return 'http://slim-dot-memoq-dot-dev-easyling.appspot.com/'
-            + slimParams;
+        return this.getSlimViewOrigin() + slimParams;
     },
     /**
      * Update the SlimView with new translation
@@ -210,8 +221,13 @@ SlimView.prototype = {
             this.internalState = SlimView.internalStates.slimViewLoaded;
         }
     },
-    getOrigin: function () {
-        return 'http://slim-dot-memoq-dot-dev-easyling.appspot.com';
+    /**
+     * Get the origin of SlimView.
+     * @see {SLIM_ENDPOINT}
+     * @returns {string}
+     */
+    getSlimViewOrigin: function () {
+        return SLIM_ENDPOINT;
     },
     /**
      * Send a message to the SlimView window
@@ -241,7 +257,7 @@ SlimView.prototype = {
      */
     _post: function(envelope) {
         console.info('MLCAT sending message', envelope.type, envelope.command, envelope.getMessageData());
-        this.slimViewWindow.postMessage(JSON.stringify(envelope), this.getOrigin());
+        this.slimViewWindow.postMessage(JSON.stringify(envelope), this.getSlimViewOrigin());
     },
     /**
      * Box the raw JSON message  into a MessageEnvelope object
