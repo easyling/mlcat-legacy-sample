@@ -1,4 +1,5 @@
 ## Classes
+
 <dl>
 <dt><a href="#EntryController">EntryController</a></dt>
 <dd></dd>
@@ -13,17 +14,26 @@
 <dt><a href="#SlimView">SlimView</a></dt>
 <dd></dd>
 </dl>
+
+## Constants
+
+<dl>
+<dt><a href="#SLIM_ENDPOINT">SLIM_ENDPOINT</a> : <code>string</code></dt>
+<dd><p>Origin of SlimView endpoint</p>
+</dd>
+</dl>
+
 <a name="EntryController"></a>
 ## EntryController
 **Kind**: global class  
 
 * [EntryController](#EntryController)
-  * [new EntryController(slimView)](#new_EntryController_new)
-  * [.entrySelected(entry, doNotLoad)](#EntryController+entrySelected)
-  * [.entryUpdated(entry)](#EntryController+entryUpdated)
-  * [.updateSelectedDivs(entry)](#EntryController+updateSelectedDivs)
-  * [.runPartialUpdate()](#EntryController+runPartialUpdate)
-  * [.addEntryToLookup(entry)](#EntryController+addEntryToLookup)
+    * [new EntryController(slimView)](#new_EntryController_new)
+    * [.entrySelected(entry, doNotLoad)](#EntryController+entrySelected)
+    * [.entryUpdated(entry)](#EntryController+entryUpdated)
+    * [.updateSelectedDivs(entry)](#EntryController+updateSelectedDivs)
+    * [.runPartialUpdate()](#EntryController+runPartialUpdate)
+    * [.addEntryToLookup(entry)](#EntryController+addEntryToLookup)
 
 <a name="new_EntryController_new"></a>
 ### new EntryController(slimView)
@@ -129,9 +139,9 @@ Exception class, triggered when SlimView send en envelope with missing propertie
 **Kind**: global class  
 
 * [MessageEnvelope](#MessageEnvelope)
-  * [new MessageEnvelope(command, messageId, viewId)](#new_MessageEnvelope_new)
-  * [.getMessageData()](#MessageEnvelope+getMessageData) ⇒ <code>\*</code>
-  * [.toJSON()](#MessageEnvelope+toJSON) ⇒ <code>Object</code>
+    * [new MessageEnvelope(command, messageId, viewId)](#new_MessageEnvelope_new)
+    * [.getMessageData()](#MessageEnvelope+getMessageData) ⇒ <code>\*</code>
+    * [.toJSON()](#MessageEnvelope+toJSON) ⇒ <code>Object</code>
 
 <a name="new_MessageEnvelope_new"></a>
 ### new MessageEnvelope(command, messageId, viewId)
@@ -159,18 +169,21 @@ Every MessagEnvelope will be serialized into JSON
 **Kind**: global class  
 
 * [SlimView](#SlimView)
-  * [new SlimView()](#new_SlimView_new)
-  * [.messageQueue](#SlimView+messageQueue) : <code>Array</code>
-  * [.load(forEntry)](#SlimView+load)
-  * [.getSlimViewUrl(entry)](#SlimView+getSlimViewUrl) ⇒ <code>string</code>
-  * [.submitTargets(entry)](#SlimView+submitTargets)
-  * [.setFreeclick()](#SlimView+setFreeclick)
-  * [.sendQueuedMessages()](#SlimView+sendQueuedMessages)
-  * [.receiveMessage(event)](#SlimView+receiveMessage)
-  * [.buildTranslationKeys(entryKeysObj)](#SlimView+buildTranslationKeys)
-  * [.handleViewChange(messageParams)](#SlimView+handleViewChange)
-  * [.sendMessage(type, command, messageData, [forced])](#SlimView+sendMessage)
-  * [.createEnvelope(type, command, messageData)](#SlimView+createEnvelope) ⇒ <code>[MessageEnvelope](#MessageEnvelope)</code>
+    * [new SlimView()](#new_SlimView_new)
+    * [.messageQueue](#SlimView+messageQueue) : <code>Array</code>
+    * [.emulateDesktopAccessToken()](#SlimView+emulateDesktopAccessToken)
+    * [.useOAuth2()](#SlimView+useOAuth2)
+    * [.load(forEntry)](#SlimView+load)
+    * [.getSlimViewUrl(entry)](#SlimView+getSlimViewUrl) ⇒ <code>string</code>
+    * [.submitTargets(entry)](#SlimView+submitTargets)
+    * [.setFreeclick()](#SlimView+setFreeclick)
+    * [.sendQueuedMessages()](#SlimView+sendQueuedMessages)
+    * [.receiveMessage(event)](#SlimView+receiveMessage)
+    * [.buildTranslationKeys(entryKeysObj)](#SlimView+buildTranslationKeys)
+    * [.handleViewChange(messageParams)](#SlimView+handleViewChange)
+    * [.getSlimViewOrigin()](#SlimView+getSlimViewOrigin) ⇒ <code>string</code>
+    * [.sendMessage(type, command, messageData, [forced])](#SlimView+sendMessage)
+    * [.createEnvelope(type, command, messageData)](#SlimView+createEnvelope) ⇒ <code>[MessageEnvelope](#MessageEnvelope)</code>
 
 <a name="new_SlimView_new"></a>
 ### new SlimView()
@@ -183,6 +196,16 @@ messages. Once connection is established between Vendor and the SlimView
 the queued messages will be submitted.
 
 **Kind**: instance property of <code>[SlimView](#SlimView)</code>  
+<a name="SlimView+emulateDesktopAccessToken"></a>
+### slimView.emulateDesktopAccessToken()
+The SlimView will function as though the embedding application was a Desktop App.
+
+**Kind**: instance method of <code>[SlimView](#SlimView)</code>  
+<a name="SlimView+useOAuth2"></a>
+### slimView.useOAuth2()
+Instruct SlimView to use OAuth2 as the authorization method
+
+**Kind**: instance method of <code>[SlimView](#SlimView)</code>  
 <a name="SlimView+load"></a>
 ### slimView.load(forEntry)
 Load SlimView for an entry. Once Vendor-SlimView communication is established,
@@ -197,6 +220,7 @@ let SlimView know that an entry needs to be highlighted.
 <a name="SlimView+getSlimViewUrl"></a>
 ### slimView.getSlimViewUrl(entry) ⇒ <code>string</code>
 Get the SlimView URL that needs to be loaded by Vendor
+If emulateDesktop is enabled, it will append the extra &o=1 get param to the URL
 
 **Kind**: instance method of <code>[SlimView](#SlimView)</code>  
 
@@ -258,6 +282,12 @@ sends over. This method attempts to handle all.
 | --- |
 | messageParams | 
 
+<a name="SlimView+getSlimViewOrigin"></a>
+### slimView.getSlimViewOrigin() ⇒ <code>string</code>
+Get the origin of SlimView.
+
+**Kind**: instance method of <code>[SlimView](#SlimView)</code>  
+**See**: {SLIM_ENDPOINT}  
 <a name="SlimView+sendMessage"></a>
 ### slimView.sendMessage(type, command, messageData, [forced])
 Send a message to the SlimView window
@@ -283,3 +313,8 @@ Box the raw JSON message  into a MessageEnvelope object
 | command | 
 | messageData | 
 
+<a name="SLIM_ENDPOINT"></a>
+## SLIM_ENDPOINT : <code>string</code>
+Origin of SlimView endpoint
+
+**Kind**: global constant  
