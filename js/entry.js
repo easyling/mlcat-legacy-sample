@@ -30,20 +30,39 @@ function Entry(key, target, href, groupTarget, internalTarget, $label) {
     // if user presses ENTER key, update the SlimView
     var input = $label.find('input.target');
     input.keyup(function(ev) {
-        that.target = input.val();
+        that.updateTarget.call(that);
         if ( ev.which == 13 ) {
-            setTimeout(function(){
-                console.info('Entry updated: ' + that.target);
-                Entry.static.entryController.entryUpdated(that);
-            }, 10);
+            that.submitTargetChange.call(that);
         }
     });
 }
 
 Entry.prototype = {
+    /**
+     * Updates the entryTarget based on the input's value
+     * @returns {string} udpated entryTarget
+     */
     getUpdateTarget: function () {
+        this.updateTarget();
         return this.target;
 //            return mlcat.isExportSegmented() ? this.targetInternalFormat : this.target;
+    },
+    /**
+     * Updates the Entry's target based on the DOM input value
+     */
+    updateTarget: function() {
+        var input = this.label.find('input.target');
+        this.target = input.val();
+    },
+    /**
+     * Submit target changes to SlimView with a bit of delay
+     */
+    submitTargetChange: function() {
+        var that = this;
+        setTimeout(function(){
+            console.info('Entry updated: ' + that.target);
+            Entry.static.entryController.entryUpdated(that);
+        }, 10);
     }
 };
 

@@ -60,7 +60,7 @@ SlimView.prototype = {
     load: function(forEntry) {
         var urlToLoad = this.getSlimViewUrl(forEntry);
 
-        if(this.lastLoadedUrl === null || this.lastLoadedUrl !== urlToLoad) {
+        if (this.lastLoadedUrl === null || this.lastLoadedUrl !== urlToLoad) {
             clearTimeout(this.loadTimeout);
             var that = this;
             this.loadTimeout = setTimeout(function() {
@@ -85,28 +85,47 @@ SlimView.prototype = {
      * @returns {string}
      */
     getSlimViewUrl: function(entry) {
-        var exportInfo =  window['exportInfo'];
+        var exportInfo = window['exportInfo'];
         var slimParams = exportInfo['projectCode'] + '?targetLanguage=' + exportInfo['targetLanguage']
             + '&url=' + encodeURIComponent(entry.href) + '&viewId=' + this.viewId;
-        if(this.emulateDesktop) {
+        if (this.emulateDesktop) {
             slimParams += "&o=1"; // o=1 means Desktop integration
-        } else if(this.oauth2Used) {
+        } else if (this.oauth2Used) {
             slimParams += "&o=2"; // o=2 means Web+OAuth2 auth
         }
         return this.getSlimViewOrigin() + slimParams;
     },
     /**
      * Update the SlimView with new translation
-     * @param entry
+     * @param {Entry} entry
      */
-    submitTargets: function(entry) {
+    submitTarget: function(entry) {
         this.sendMessage('request', 'submitTargets', {
             'updates': [{
                 'key': entry.key,
-                'target':  entry.getUpdateTarget(),
+                'target': entry.getUpdateTarget(),
                 'propagate': false
             }],
-            'save': true
+            'save': false
+        });
+    },
+    /**
+     * It is possible to submit multiple updates at once to the SlimView. Especially useful when one wants to make sure
+     * that the target pages has the same content as the vendor's editor.
+     * It will update SlimView with new translation for the entries just like submitTarget
+     * @param {Entry[]} entries
+     */
+    submitBatchedTargets: function(entries) {
+        var updates = entries.map(function(entry) {
+            return {
+                'key': entry.key,
+                'target': entry.getUpdateTarget(),
+                'propagate': false
+            }
+        });
+        this.sendMessage('request', 'submitTargets', {
+            'updates': updates,
+            'save': false
         });
     },
     /**
@@ -122,12 +141,12 @@ SlimView.prototype = {
      * every outgoing message is queued. These will be flushed upon successful
      * handshake.
      */
-    sendQueuedMessages: function () {
+    sendQueuedMessages: function() {
         console.group();
         console.info('Vendor-SlimView connection established. Queue length: ' + this.messageQueue.length);
         var queueCopy = this.messageQueue.slice();
         this.messageQueue = [];
-        for(var i = 0; i < queueCopy.length; ++i) {
+        for (var i = 0; i < queueCopy.length; ++i) {
             var envelope = queueCopy[i];
             this._post(envelope);
         }
@@ -142,7 +161,7 @@ SlimView.prototype = {
 
         function verifyEnvelope(envelope) {
             var valid = envelope.hasOwnProperty('command') && envelope.hasOwnProperty('messageId') && envelope.hasOwnProperty('viewId');
-            if (!valid)	{
+            if (!valid) {
                 /* global MissingEnvelopePropertyException */
                 throw new MissingEnvelopePropertyException(envelope);
             }
@@ -155,25 +174,28 @@ SlimView.prototype = {
         var envelope = JSON.parse(event.data);
         var that = this;
         if (verifyEnvelope(envelope)) {
-            switch(envelope.command) {
-            case 'slimViewLoaded':
-                that.internalState = SlimView.internalStates.slimViewLoaded;
-                var responseParams = {};
-                if(that.oauth2Used) {
-                    responseParams['accessToken'] = 'ACCESS_TOKEN';
-                }
-                that.sendMessage('response', 'vendorReady', responseParams, true);
-                break;
-            case 'slimViewReady':
-                that.buildTranslationKeys(envelope.parameters);
-                that.internalState = SlimView.internalStates.slimViewReady;
-                that.sendQueuedMessages();
-                break;
-            case 'viewChanged':
-                this.handleViewChange(envelope.parameters);
-                break;
-            default:
-                break;
+            switch (envelope.command) {
+                case 'slimViewLoaded':
+                    that.internalState = SlimView.internalStates.slimViewLoaded;
+                    var responseParams = {};
+                    if (that.oauth2Used) {
+                        responseParams['accessToken'] = '4GZj0phv6Gk5MV0BFbXJ8hr6uopbOwTX';
+                    }
+                    that.sendMessage('response', 'vendorReady', responseParams, true);
+                    break;
+                case 'slimViewReady':
+                    that.buildTranslationKeys(envelope.parameters);
+                    that.internalState = SlimView.internalStates.slimViewReady;
+                    that.sendQueuedMessages();
+                    break;
+                case 'viewChanged':
+                    this.handleViewChange(envelope.parameters);
+                    break;
+                case 'invalidAccessToken':
+                    console.error('Invalid access token used');
+                    break;
+                default:
+                    break;
             }
         }
     },
@@ -197,19 +219,19 @@ SlimView.prototype = {
 
             var selectedEntry = null;
 
-            if(SlimView.static.entryController.entryByKey.hasOwnProperty(nonUniqueKey)) {
+            if (SlimView.static.entryController.entryByKey.hasOwnProperty(nonUniqueKey)) {
                 // we have an entry by a unique key
                 selectedEntry = SlimView.static.entryController.entryByKey[nonUniqueKey];
-            } else if(SlimView.static.entryController.entryByKey.hasOwnProperty(nonUniqueKey + '#0')) {
+            } else if (SlimView.static.entryController.entryByKey.hasOwnProperty(nonUniqueKey + '#0')) {
                 selectedEntry = SlimView.static.entryController.entryByKey[nonUniqueKey + '#0'];
-            } else if(SlimView.static.entryController.entryByKey.hasOwnProperty(uniqueKey)) {
+            } else if (SlimView.static.entryController.entryByKey.hasOwnProperty(uniqueKey)) {
                 selectedEntry = SlimView.static.entryController.entryByKey[uniqueKey];
             } else {
                 selectedEntry = SlimView.static.entryController.entryByKey[uniqueKey + '#0'];
             }
 
             // if entry was not found, dump an error message into console
-            if(!selectedEntry) {
+            if (!selectedEntry) {
                 throw 'Cannot select entry because key was not found: ' + JSON.stringify(messageParams);
             }
 
@@ -226,7 +248,7 @@ SlimView.prototype = {
      * @see {SLIM_ENDPOINT}
      * @returns {string}
      */
-    getSlimViewOrigin: function () {
+    getSlimViewOrigin: function() {
         return SLIM_ENDPOINT;
     },
     /**
@@ -237,7 +259,7 @@ SlimView.prototype = {
      * @param {bool} [forced] Do not check connection state before sending message - used to handshake. Defaults to false
      */
     sendMessage: function(type, command, messageData, forced) {
-        if(forced == null)
+        if (forced == null)
             forced = false;
 
         var envelope = this.createEnvelope(type, command, messageData);
@@ -270,23 +292,23 @@ SlimView.prototype = {
         /* global MessageEnvelope, InvalidEnvelopeTypeException */
         var envelope = new MessageEnvelope(command, this.getToken(), this.viewId);
         switch (type) {
-        case 'request':
-            envelope.setRequestData(messageData);
-            break;
-        case 'response':
-            envelope.setReponseData(messageData);
-            break;
-        case 'error':
-            envelope.setErrorData(messageData);
-            break;
-        default:
-            throw new InvalidEnvelopeTypeException(type);
+            case 'request':
+                envelope.setRequestData(messageData);
+                break;
+            case 'response':
+                envelope.setReponseData(messageData);
+                break;
+            case 'error':
+                envelope.setErrorData(messageData);
+                break;
+            default:
+                throw new InvalidEnvelopeTypeException(type);
         }
         return envelope;
     },
     init: function() {
         var that = this;
-        window.addEventListener('message', function(){
+        window.addEventListener('message', function() {
             that.receiveMessage.apply(that, arguments);
         }, false);
     }

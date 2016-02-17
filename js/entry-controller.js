@@ -14,6 +14,12 @@ function EntryController(slimView) {
     this.selectedEntry = null;
     this.slimView = slimView;
 
+    /**
+     * List of entries created for the sample project
+     * @type {Entry[]}
+     */
+    this.entries = [];
+
     /* global Entry, SlimView */
     Entry.static.entryController = this;
     SlimView.static.entryController = this;
@@ -42,7 +48,7 @@ EntryController.prototype = {
      */
     entryUpdated: function(entry) {
         this.updateSelectedDivs(entry);
-        this.slimView.submitTargets(entry);
+        this.slimView.submitTarget(entry);
     },
     /**
      * Update the DOMElements for en {Entry}
@@ -74,6 +80,13 @@ EntryController.prototype = {
      */
     addEntryToLookup: function(entry) {
         this.entryByKey[entry.key] = entry;
+    },
+    updateAllEntries: function() {
+        var that = this;
+        this.entries.forEach(function(entry) {
+            entry.updateTarget();
+        });
+        this.slimView.submitBatchedTargets(this.entries);
     },
     _toggleLabels: function(activeLabel) {
         $('label.active').toggleClass('active', false);

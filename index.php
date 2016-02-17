@@ -285,6 +285,7 @@ $SEGMENTED = count(TranslationGroup::$byKey) > 0;
 $groupDisplay = $SEGMENTED ? 'block' : 'none';
 $jsSegmented = $SEGMENTED ? 'true' : 'false';
 echo <<<EOT
+<!DOCTYPE html>
 <html>
 <head>
     <style>
@@ -405,6 +406,7 @@ echo <<<EOT
     <div class="selected-target">Export format target: <div id="target"></div></div>
     <div class="selected-target">Internal format target: <textarea id="internal-target"></textarea></div><button id="partial-update-button">Partial-friggin-update</button>
     <div class="selected-group-target">Group target: <div id="group-target"></div></div>
+    <button id="update-all">Update all</button>
     <iframe id="embedSlimView" src="about:blank" style="width: 1024px; border: 1px solid black; height: 700px;">
 
     </iframe>
